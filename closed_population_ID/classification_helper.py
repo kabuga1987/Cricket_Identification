@@ -128,7 +128,7 @@ class ModelArchitecture(object):
         x = GlobalMaxPooling2D()(x)
         x = Dense(256,activation='relu')(x)
         x = Dense(128,activation='relu')(x)
-        x = Dense(3,activation = 'softmax')(x)
+        x = Dense(3,activation = 'softmax')(x) # the number of classes is 47 for the full data
         return Model(Ims, x, name = "ID_classification_model")
     
     
