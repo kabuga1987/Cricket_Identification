@@ -1,4 +1,11 @@
-## Cricket Individual animal identification
+# Cricket individual identification
+## Introduction
+This project develops deep learning and random forest classifiers to identify cricket individuals in closed- and open-population contexts. The closed-population framework assumes that the number of individuals is known and fixed during the study period. In this context, the classifier takes a spectrogram for convolutional neural networks (CNNs) and an MFCC vector for random forests (RFs) and predicts the probability that it belongs to each of the target crickets. On the other hand, the open-population assumes that the number of individuals is unknown and may vary over time. In this context, the classifier takes two spectograms for CNNs and two MFCC vectors for RFs and predicts the similarity score that these two samples belongs to the same or different individuals.
+
+
+
+
+
 This project integrates preprocessing, feature extraction, and identification steps to ascertain the feasibility of identifying cricket individuals exclusively from their calls.
 
 1. The preprocessing step ([chirp_index_extraction](https://github.com/kabuga1987/Cricket_Identification/tree/main/chirp_index_extraction) or [segment_index_extraction](https://github.com/kabuga1987/Cricket_Identification/tree/main/segment_index_extraction)) applies a noise reduction algorithm and a lower filter to remove noise before segmenting the cricket signal into acoustically relevant units.
