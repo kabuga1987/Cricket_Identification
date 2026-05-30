@@ -2,6 +2,10 @@
 ## Introduction
 This project develops deep learning and random forest classifiers to identify cricket individuals in closed- and open-population contexts. The closed-population framework assumes that the number of individuals is known and fixed during the study period. In this context, the classifier takes a spectrogram for convolutional neural networks (CNNs) and an MFCC vector for random forests (RFs) and predicts the probability that it belongs to each of the target crickets. On the other hand, the open-population assumes that the number of individuals is unknown and may vary over time. In this context, the classifier takes two spectograms for CNNs and two MFCC vectors for RFs and predicts the similarity score that these two samples belongs to the same or different individuals.
 
+## Methodology overview
+
+![Methodology overview](images/summary.pdf)
+
 
 
 
