@@ -4,8 +4,9 @@ This project develops deep learning and random forest classifiers to identify cr
 
 ## Methodology overview
 
-
-<img src="images/summary.pdf" width="300">
+<p align="center">
+<img src="images/summary.pdf" width="700">
+</p>
 
 
 
