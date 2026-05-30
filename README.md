@@ -4,8 +4,8 @@ This project develops deep learning and random forest classifiers to identify cr
 
 ## Methodology overview
 
-![Methodology overview](https://github.com/kabuga1987/Cricket_Identification/blob/main/images/summary.pdf)
 
+<img src="images/summary.pdf" width="300">
 
 
 
