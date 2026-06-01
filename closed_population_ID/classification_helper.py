@@ -23,7 +23,6 @@ class Preprocessing:
         self.path_2_imarray = path_2_imarray
         self.meanvar = meanvar
     
-    
     def load_imarray(self, img):
         img = np.load(self.path_2_imarray + img+".npy")
         #img = self.mel_spec_2_log_spec(img)
@@ -31,8 +30,7 @@ class Preprocessing:
 
     def mel_spec_2_log_spec(self, mel_spectrogram):
         return librosa.core.power_to_db(mel_spectrogram)
-        
-    
+           
     def zeromean_unitvariance_normalizer(self,img):
         imarray = self.load_imarray(img)
         imarray -= np.mean(imarray, keepdims = True)
@@ -43,40 +41,12 @@ class Preprocessing:
         imarray = self.load_imarray(img)
         norm_imarray = (imarray - imarray.min()) / (imarray.max() - imarray.min())
         norm_imarray = norm_imarray * (_max - _min) + _min
-        return np.expand_dims(norm_imarray, axis = 2)
-    
-    
-         
+        return np.expand_dims(norm_imarray, axis = 2)        
     
     def preprocess(self, img):
         return self.zeromean_unitvariance_normalizer(img) if self.meanvar else self.min_max_normalizer(img)
         
     
-    
-    def spec_augment(self, original_melspec, freq_masking_max_percentage = 0.15, time_masking_max_percentage = 0.15):
-        
-        # from https://towardsdatascience.com/data-augmentation-techniques-for-audio-data-in-python-15505483c63c
-
-        augmented_melspec = original_melspec.copy()
-        all_frames_num, all_freqs_num = augmented_melspec.shape
-
-        # Frequency masking
-        freq_percentage = random.uniform(0.0, freq_masking_max_percentage)
-        num_freqs_to_mask = int(freq_percentage * all_freqs_num)
-        f0 = int(np.random.uniform(low = 0.0, high = (all_freqs_num - num_freqs_to_mask)))
-
-        augmented_melspec[:, f0:(f0 + num_freqs_to_mask)] = 0
-
-        # Time masking
-        time_percentage = random.uniform(0.0, time_masking_max_percentage)
-        num_frames_to_mask = int(time_percentage * all_frames_num)
-        t0 = int(np.random.uniform(low = 0.0, high = (all_frames_num - num_frames_to_mask)))
-
-        augmented_melspec[t0:(t0 + num_frames_to_mask), :] = 0
-
-        return augmented_melspec
-
-
 class Generator(Sequence, Preprocessing):
 
     
@@ -110,7 +80,7 @@ class Generator(Sequence, Preprocessing):
     
 class ModelArchitecture(object):
     
-    def __init__(self, shp, l2 = 0.0, k1 = 1, k2 = 2, k3 = 3, k9 = 9, mid = 32):
+    def __init__(self, shp, l2 = 0.0, k1 = 1, k2 = 2, k3 = 3, k9 = 7, mid = 32):
         
         self.k1,self.k2,self.k3,self.k9,self.mid = k1,k2,k3,k9,mid
         self.regul = regularizers.l2(l2)

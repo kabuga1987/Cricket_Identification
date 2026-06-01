@@ -23,7 +23,7 @@ Before acoustic individual identification, two acoustic-based segmentation appro
 
 
 
- The [chirp detector](https://github.com/kabuga1987/Cricket_Identification/tree/main/chirp_index_extraction) identifies chirp start and end times as the earliest and latest points at which the signal-to-noise ratio (SNR) amplitude exceeds a threshold of 0.1. Consecutive threshold crossings are considered part of the same chirp if they are separated by no more than 45 ms (2,000 samples). In the first stage, the algorithm processes an audio file and outputs the start and end times of each detected chirp. An example is shown in the figure below, where the red vertical lines indicate chirp start times and the green vertical lines indicate chirp end times. For implementation details, see [`chirp_index_extractor.ipynb`](https://github.com/kabuga1987/Cricket_Identification/blob/main/chirp_index_extraction/chirp_index_extractor.py).
+ The [chirp detector](https://github.com/kabuga1987/Cricket_Identification/tree/main/chirp_index_extraction) identifies chirp start and end times as the earliest and latest points at which the signal-to-noise ratio (SNR) amplitude exceeds a threshold of 0.1. Consecutive threshold crossings are considered part of the same chirp if they are separated by no more than 45 ms (2,000 samples). In the first stage, the algorithm processes an audio file and outputs the start and end times of each detected chirp. An example is shown in the figure below, where the red vertical lines indicate chirp start times and the green vertical lines indicate chirp end times. For implementation details, see [`chirp_index_extractor.py`](https://github.com/kabuga1987/Cricket_Identification/blob/main/chirp_index_extraction/chirp_index_extractor.py).
 
  
 <p align="center">
@@ -40,7 +40,7 @@ In the second stage, the algorithm is used to detect syllables within each extra
 
 ### One-second segment extraction
 
-[Fixed-length segmenatation approach ](https://github.com/kabuga1987/Cricket_Identification/tree/main/segment_index_extraction) divides each audio recording into segments of 1-second duration, with 80% overlap between successive segments. The figure below displays an example of 1-second segment waveform. For implementation details, see [`segment_index_extractor.ipynb`](https://github.com/kabuga1987/Cricket_Identification/blob/main/chirp_index_extraction/chirp_index_extractor.py).
+[Fixed-length segmenatation approach ](https://github.com/kabuga1987/Cricket_Identification/tree/main/segment_index_extraction) divides each audio recording into segments of 1-second duration, with 80% overlap between successive segments. The figure below displays an example of 1-second segment waveform. For implementation details, see [`segment_index_extractor.py`](https://github.com/kabuga1987/Cricket_Identification/blob/main/segment_index_extraction/segment_index_extractor.py).
 
 <p align="center">
 <img src="segment_index_extraction/1s_signal.png" width="500">

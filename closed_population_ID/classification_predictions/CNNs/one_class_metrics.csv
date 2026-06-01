@@ -1,5 +1,5 @@
 Dataset,Accuracy
-night1_validation,0.502
-night1_test,0.481
-night2_test,0.004
-night3_test,0.183
+night1_validation,0.253
+night1_test,0.254
+night2_test,0.481
+night3_test,0.0
