@@ -23,7 +23,7 @@ Before acoustic individual identification, two acoustic-based segmentation appro
 
 
 
- The [chirp detector](https://github.com/kabuga1987/Cricket_Identification/tree/main/chirp_index_extraction) identifies chirp start and end times as the earliest and latest points at which the signal-to-noise ratio (SNR) amplitude exceeds a threshold of 0.1. Consecutive threshold crossings are considered part of the same chirp if they are separated by no more than 45 ms (2,000 samples). In the first stage, the algorithm processes an audio file and outputs the start and end times of each detected chirp. An example is shown in the figure below, where the red vertical lines indicate chirp start times and the green vertical lines indicate chirp end times. For implementation details, see [`chirp_index_extractor.ipynb`](https://github.com/kabuga1987/Cricket_Identification/blob/main/chirp_index_extraction/chirp_index_extractor.ipynb).
+ The [chirp detector](https://github.com/kabuga1987/Cricket_Identification/tree/main/chirp_index_extraction) identifies chirp start and end times as the earliest and latest points at which the signal-to-noise ratio (SNR) amplitude exceeds a threshold of 0.1. Consecutive threshold crossings are considered part of the same chirp if they are separated by no more than 45 ms (2,000 samples). In the first stage, the algorithm processes an audio file and outputs the start and end times of each detected chirp. An example is shown in the figure below, where the red vertical lines indicate chirp start times and the green vertical lines indicate chirp end times. For implementation details, see [`chirp_index_extractor.ipynb`](https://github.com/kabuga1987/Cricket_Identification/blob/main/chirp_index_extraction/chirp_index_extractor.py).
 
  
 <p align="center">
@@ -40,7 +40,7 @@ In the second stage, the algorithm is used to detect syllables within each extra
 
 ### One-second segment extraction
 
-[Fixed-length segmenatation approach ](https://github.com/kabuga1987/Cricket_Identification/tree/main/segment_index_extraction) divides each audio recording into segments of 1-second duration, with 80% overlap between successive segments. The figure below displays an example of 1-second segment waveform. For implementation details, see [`segment_index_extractor.ipynb`](github.com/kabuga1987/Cricket_Identification/blob/main/segment_index_extraction/segment_index_extractor.ipynb).
+[Fixed-length segmenatation approach ](https://github.com/kabuga1987/Cricket_Identification/tree/main/segment_index_extraction) divides each audio recording into segments of 1-second duration, with 80% overlap between successive segments. The figure below displays an example of 1-second segment waveform. For implementation details, see [`segment_index_extractor.ipynb`](https://github.com/kabuga1987/Cricket_Identification/blob/main/chirp_index_extraction/chirp_index_extractor.py).
 
 <p align="center">
 <img src="segment_index_extraction/1s_signal.png" width="500">
@@ -50,7 +50,7 @@ In the second stage, the algorithm is used to detect syllables within each extra
 
 This project explored three types of acoustic features for cricket individual identification: spectrograms, Mel-frequency cepstral coefficients (MFCCs), and temporal features. Spectrograms and MFCCs were generated from both 1-second audio segments and five-syllable chirps, whereas temporal features were extracted exclusively from five-syllable chirps. In addition, the project investigated the influence of temperature on acoustic features and evaluated model performance using temperature-corrected spectrograms.
 
-Implementation details for generating spectrograms and MFCCs from 1-second segments are provided in [`segment_spec_mfcc_extraction.py`](github.com/kabuga1987/Cricket_Identification/blob/main/segment_spectrogram_mfcc_feature_extraction/segment_spec_mfcc_extraction.py) The extraction of MFCCs, temporal features, and carrier frequency from five-syllable chirps is described in MFCCs_Tfs_carrier_freq_5syllable_chirps.ipynb. Details of the spectrogram temperature-correction procedure are available in spectrogram_temperature_correction.ipynb.
+Implementation details for generating spectrograms and MFCCs from 1-second segments are provided in [`segment_spec_mfcc_extraction.py`](github.com/kabuga1987/Cricket_Identification/blob/main/segment_spectrogram_mfcc_feature_extraction/segment_spec_mfcc_extraction.py) The extraction of spectrograms, MFCCs, temporal features, and carrier frequency from five-syllable chirps is detailed in [`spectrogram_mfccs_tfs_5syllable_chirps.py`](https://github.com/kabuga1987/Cricket_Identification/blob/main/5syllable_chirp_spectrogram_creation/spectrogram_mfccs_tfs_5syllable_chirps.py). Details of the spectrogram temperature-correction procedure are implemented in [`5syllable_chirp_spectrogram_temperature_correction.py`](https://github.com/kabuga1987/Cricket_Identification/blob/main/temperature_correction/5syllable_chirp_spectrogram_temperature_correction.py).
 
 
 ## Methodology
