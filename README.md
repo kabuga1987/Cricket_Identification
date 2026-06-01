@@ -45,7 +45,12 @@ Before acoustic individual identification, two acoustic-based segmentation appro
 
  The [chirp detector](https://github.com/kabuga1987/Cricket_Identification/tree/main/chirp_index_extraction) identifies chirp start and end times as the earliest and latest points at which the signal-to-noise ratio (SNR) amplitude exceeds a threshold of 0.1. Consecutive threshold crossings are considered part of the same chirp if they are separated by no more than 45 ms (2,000 samples). In the first stage, the algorithm processes an audio file and outputs the start and end times of each detected chirp. An example is shown in the figure below, where the red vertical lines indicate chirp start times and the green vertical lines indicate chirp end times. For implementation details, see [`chirp_index_extractor.ipynb`](https://github.com/kabuga1987/Cricket_Identification/blob/main/chirp_index_extraction/chirp_index_extractor.ipynb).
 
-![chirp index](chirp_index_extractor/chirp.png)
+ 
+<p align="center">
+<img src="https://github.com/kabuga1987/Cricket_Identification/blob/main/chirp_index_extraction/chirp.png" width="700">
+</p>
+
+
 
 In the second stage, the algorithm is used to detect syllables within each extracted chirp, enabling the subsequent computation of temporal features such as syllable duration and inter-syllable interval. For syllable detection, a maximum gap of 5.3 ms (235 samples) between threshold crossings is allowed for points to be considered part of the same syllable. At this stage, the algorithm takes a chirp signal as input and outputs the start and end times of each detected syllable. These outputs are then used to calculate the number of syllables per chirp and other temporal characteristics. The figure below illustrates the syllable detection process.
 
