@@ -50,7 +50,7 @@ In the second stage, the algorithm is used to detect syllables within each extra
 
 This project explored three types of acoustic features for cricket individual identification: spectrograms, Mel-frequency cepstral coefficients (MFCCs), and temporal features. Spectrograms and MFCCs were generated from both 1-second audio segments and five-syllable chirps, whereas temporal features were extracted exclusively from five-syllable chirps. In addition, the project investigated the influence of temperature on acoustic features and evaluated model performance using temperature-corrected spectrograms.
 
-Implementation details for generating spectrograms and MFCCs from 1-second segments are provided in segment_spec_mfcc_extraction.ipynb. The extraction of MFCCs, temporal features, and carrier frequency from five-syllable chirps is described in MFCCs_Tfs_carrier_freq_5syllable_chirps.ipynb. Details of the spectrogram temperature-correction procedure are available in spectrogram_temperature_correction.ipynb.
+Implementation details for generating spectrograms and MFCCs from 1-second segments are provided in [`segment_spec_mfcc_extraction.py`](github.com/kabuga1987/Cricket_Identification/blob/main/segment_spectrogram_mfcc_feature_extraction/segment_spec_mfcc_extraction.py) The extraction of MFCCs, temporal features, and carrier frequency from five-syllable chirps is described in MFCCs_Tfs_carrier_freq_5syllable_chirps.ipynb. Details of the spectrogram temperature-correction procedure are available in spectrogram_temperature_correction.ipynb.
 
 
 ## Methodology
