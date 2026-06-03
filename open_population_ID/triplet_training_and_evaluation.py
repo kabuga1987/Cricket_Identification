@@ -1,4 +1,4 @@
-from Triplet_CNN_helper import*
+from triplet_CNN_helper import*
 
 #==============================
 
@@ -15,40 +15,22 @@ def run_matching_pipeline(
     epochs=10,
     lr_start=1e-3,
     lr_end=1e-5,
-    meanvar=True
+    meanvar=True,
 ):
-    """
-    Train and evaluate a CNN matching model.
-    """
 
-    # =====================================================
-    # Load training and validation samples
-    # =====================================================
     loader = DataLoader(p_train, p_validation, samples_per_ID)
     Ts, TYs, Vs, VYs = loader.train_validation_samples_labels()
-    # =====================================================
-    # Data generators
-    # =====================================================
-    train_generator = Generator(Ts, TYs, shp, batch_size, p_arrays, meanvar)
-    validation_generator = Generator(Vs, VYs, shp, batch_size, p_arrays, meanvar)
-    # =====================================================
-    # Model architecture
-    # =====================================================
-    architecture = ModelArchitecture(shp=shp)
 
-    # =====================================================
-    # Training
-    # =====================================================
+    train_gen = Generator(Ts, TYs, shp, batch_size, p_arrays, meanvar)
+    val_gen = Generator(Vs, VYs, shp, batch_size, p_arrays, meanvar)
+
     trainer = Training()
-    trainer.architecture = architecture
-    trainer.Tgenerator = train_generator
-    trainer.Vgenerator = validation_generator
+    trainer.architecture = ModelArchitecture(shp=shp)
+    trainer.Tgenerator = train_gen
+    trainer.Vgenerator = val_gen
 
     model = trainer.train(lr_start, lr_end, p_weights, epochs)
 
-    # =====================================================
-    # Evaluation
-    # =====================================================
     evaluator = Evaluation()
 
     predictor = Predictions(
@@ -57,28 +39,23 @@ def run_matching_pipeline(
         path_val_pairs=f"{p_tests}n1_validation_pairs.csv",
         path_tests=p_tests,
         p_arrays=p_arrays,
-        path_preds=p_preds,
+        p_preds=p_preds,
         shp=shp,
-        bs=batch_size
+        bs=batch_size,
     )
 
     predictor.model = model
     predictor.evaluator = evaluator
 
-    # =====================================================
-    # Prediction and metrics
-    # =====================================================
-    df_metrics = predictor.Execution(model)
+    df_metrics = predictor.execution(model)
 
-    print()
-    print("=" * 50)
+    print("\n" + "=" * 50)
     print("Evaluation metrics")
-    print("=" * 50)
-    print()
+    print("=" * 50 + "\n")
 
     return model, df_metrics
 
-#=========================================================
+#======================================================
 
 if __name__ == "__main__":
 
@@ -91,7 +68,7 @@ if __name__ == "__main__":
         shp=(128, 173, 1),
         batch_size=256,
         samples_per_ID=16,
-        epochs=10,
+        epochs=1,
         lr_start=1e-3,
         lr_end=1e-5,
         meanvar=True

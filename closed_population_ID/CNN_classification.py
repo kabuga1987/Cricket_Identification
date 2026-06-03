@@ -1,7 +1,3 @@
-import os
-import numpy as np
-import pandas as pd
-from tensorflow.keras.utils import to_categorical
 from classification_helper import*
 #==============================================
 
@@ -24,7 +20,7 @@ def run_classification_pipeline(
 
     encoder = LabelEncoder(p_segments, p_train_val_test)
 
-    train_x, train_y, val_x, val_y, test_x, test_y, n2_x, n2_y, n3_x, n3_y = encoder.HotEncodeLabels()
+    train_x, train_y, val_x, val_y, test_x, test_y, n2_x, n2_y, n3_x, n3_y = encoder.execution()
 
     tgen = Generator(train_x, train_y, shp, batch_size, path_array, use_meanvar)
     vgen = Generator(val_x, val_y, shp, batch_size, path_array, use_meanvar)
@@ -41,19 +37,13 @@ def run_classification_pipeline(
 
     predictor = Predictions(
         model=model,
-        v1x=val_x,
-        v1y=val_y,
-        n1x=test_x,
-        n1y=test_y,
-        n2x=n2_x,
-        n2y=n2_y,
-        n3x=n3_x,
-        n3y=n3_y,
-        vgen=vgen,
-        gen1=tst_gen,
-        gen2=n2_gen,
-        gen3=n3_gen,
         p_preds=p_predictions,
+        data={
+            "one_n1_val": (val_x, val_y, vgen),
+            "one_n1_test": (test_x, test_y, tst_gen),
+            "one_n2_test": (n2_x, n2_y, n2_gen),
+            "one_n3_test": (n3_x, n3_y, n3_gen),
+        }
     )
 
     return predictor.execution()
@@ -61,14 +51,12 @@ def run_classification_pipeline(
 
 if __name__ == "__main__":
 
-    # Paths
     P_SEGMENTS = "../segment_index_extraction/segment_data.csv"
     P_TRAIN_VAL_TEST = "train_val_test_segment_data/"
     P_PREDICTIONS = "classification_predictions/CNNs/"
     PATH_ARRAY = "../segment_spectrogram_mfcc_feature_extraction/spectrogram_arrays/"
     PATH_WEIGHTS = "weights/n1_classification.h5"
 
-    # Model / training configuration
     SHP = (128, 173, 1)
     LR = 1e-3
     FINE_LR = 1e-4
@@ -90,4 +78,4 @@ if __name__ == "__main__":
         use_meanvar=USE_MEANVAR,
     )
 
-    print(f"\n\n{metrics}")
+    print(f"\n{metrics}")
