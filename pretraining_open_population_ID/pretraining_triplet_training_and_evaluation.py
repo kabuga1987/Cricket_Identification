@@ -39,7 +39,7 @@ def run_matching_pipeline(
     # ==================================================
     architecture = CricketEmbedding(
         input_shape=shp,
-        use_pretrained=False,
+        use_pretrained=True,
         fine_tune=True
     )
 

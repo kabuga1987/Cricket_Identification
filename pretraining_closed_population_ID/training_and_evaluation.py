@@ -77,8 +77,8 @@ if __name__ == "__main__":
     BATCH_SIZE = 128
 
     # Transfer learning configuration
-    USE_PRETRAINED = False
-    FINE_TUNE = False
+    USE_PRETRAINED = True # set to False if you want full finetuning, i.e, training from scratch
+    FINE_TUNE = True # Set to False if you want to re-use the pretrained weights
 
     metrics = run_pretrained_classification_pipeline(
         p_segments=P_SEGMENTS,
