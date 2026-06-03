@@ -20,7 +20,6 @@ from tqdm import tqdm
 import random
 import os
 import matplotlib.pyplot as plt
-import librosa
 
 #========================================
 class DataLoader:

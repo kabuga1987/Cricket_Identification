@@ -7,13 +7,6 @@ This code accompanies the paper: **Acoustic individual identification in a speci
 ## Authors
 Emmanuel Kabuga, Diptarup Nandi, Stuart Burrell, Gciniwe Dlamini, Rohini Balakrishnan, Bubacarr Bah, Ian Durbach
 
-## Requirements
-
-
-All required packages can be installed  using `pip install -r requirements.txt`
-
-Numpy, Pandas, Sklearn, Tensorflow, Keras, Librosa, and Scipy
-
 
 ## Preprocessing
 
@@ -57,17 +50,28 @@ Implementation details for generating spectrograms and MFCCs from 1-second segme
 
 This project develops deep learning and random forest classifiers for identifying individual crickets in both closed- and open-population settings.
 
-In the [closed-population identification](https://github.com/kabuga1987/Cricket_Identification/tree/main/closed_population_ID), the number of individuals is assumed to be known and fixed throughout the study period. Under this setting, the classifier takes a spectrogram as input for convolutional neural networks (CNNs) or an MFCC feature vector for random forests (RFs) and predicts the probability that the sample belongs to each target individual.
+In the [closed-population identification](https://github.com/kabuga1987/Cricket_Identification/tree/main/closed_population_ID), the number of individuals is assumed to be known and fixed throughout the study period. Under this setting, the classifier takes a spectrogram as input for convolutional neural networks (CNNs) or an MFCC feature vector for random forests (RFs) and predicts the probability that the sample belongs to each target individual. 
 
 In contrast, the [open-population identification](https://github.com/kabuga1987/Cricket_Identification/tree/main/open_population_ID) assumes that the number of individuals is unknown and may change over time. In this setting, the classifier takes a pair of spectrograms for CNNs or a pair of MFCC feature vectors for RFs and predicts a similarity score indicating whether the two samples originate from the same individual or from different individuals.
 
 To benchmark the performance of models trained from scratch, transfer learning using a pre-trained model was applied in both the [closed-](https://github.com/kabuga1987/Cricket_Identification/tree/main/pretraining_closed_population_ID) and [open-population](https://github.com/kabuga1987/Cricket_Identification/tree/main/pretraining_open_population_ID) settings.
+
+For each identification task, the **`..._helper.py`** script implements the full workflow, including data loading, preprocessing, model development, training, and evaluation, while the **`..._training_and_evaluation.py`** script executes the complete experimental pipeline to generate predictions and compute evaluation metrics.
 
 The summary of our methodologies is illustrated below.
 
 <p align="center">
 <img src="images/summary.png" width="500">
 </p>
+
+
+## Requirements
+
+
+All required packages can be installed  using `pip install -r requirements.txt`
+
+Numpy, Pandas, Scikit-learn, Tensorflow, Keras, Librosa, Scipy, Matplotlib, and Lapjv
+
 
 
 
