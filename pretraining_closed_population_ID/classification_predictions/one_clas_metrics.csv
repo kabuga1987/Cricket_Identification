@@ -1,2 +1,2 @@
-accuracy,night1v,night1,night2,night3
-accuracy,0.618,0.569,0.501,0.255
+validation,one_n1_test,one_n2_test,one_n3_test
+0.263,0.261,0.519,1.0

@@ -226,6 +226,98 @@ class Training:
         print("++++++++++++++++++++++++++++++++++++++++++++++++++")
         print()
         model.load_weights(pw)
-
         
         return model
+
+#=================================
+
+class LabelEncoder:
+
+    def __init__(self, p_segments, p_samples):
+
+        self.p_segments = p_segments
+
+        self.files = {
+            "train": f"{p_samples}n1_train.csv",
+            "validation": f"{p_samples}n1_validation.csv",
+            "n1_test": f"{p_samples}n1_test.csv",
+            "n2_test": f"{p_samples}n2_test.csv",
+            "n3_test": f"{p_samples}n3_test.csv",
+        }
+
+    def hot_encode_labels(self, samples, id_to_samples):
+
+        sample_to_numeric_id = {sample: i for i, sample_list in enumerate(id_to_samples.values()) for sample in sample_list}
+        sample_keys, numeric_ids = zip(*sample_to_numeric_id.items())
+        sample_to_label = {sample_keys[i]: label for i, label in enumerate(to_categorical(numeric_ids))}
+
+        return np.array(samples), np.array([sample_to_label[sample] for sample in samples])
+
+    def execution(self):
+
+        df = pd.read_csv(self.p_segments)[["Segment", "ID"]]
+        sample_to_id = {sample: ID for sample, ID in df.to_records(index=False)}
+
+        id_to_samples = {}
+        for sample, ID in sample_to_id.items(): id_to_samples.setdefault(ID, []).append(sample)
+
+        outputs = []
+
+        for name in ["train", "validation", "n1_test", "n2_test", "n3_test"]:
+
+            samples = pd.read_csv(self.files[name]).Segment.values
+            x, y = self.hot_encode_labels(samples, id_to_samples)
+            idx = np.random.permutation(len(samples))
+
+            outputs.extend([x[idx], y[idx]])
+
+        return tuple(outputs)
+
+#=========================================================
+
+class Predictions:
+
+    def __init__(self, model, p_preds, data):
+
+        self.model = model
+        self.p_preds = p_preds
+
+        self.data = data
+
+    def predict(self, samples, hotlabels, generator, name, verbose=0):
+
+        predictions = self.model.predict(generator, verbose=verbose)
+
+        observed = np.argmax(hotlabels, axis=1)
+        predicted = np.argmax(predictions, axis=1)
+        maxima = np.max(predictions, axis=1)
+
+        accuracy = round(np.mean(observed == predicted), 3)
+
+        print(f"accuracy for {name} = {accuracy}")
+
+        pd.DataFrame({
+            "samples": samples,
+            "labels": observed,
+            "predictions": predicted,
+            "maximum": maxima,
+        }).to_csv(f"{self.p_preds}{name}.csv", index=False)
+
+        return accuracy
+
+    def execution(self):
+
+        metrics = {
+            name: self.predict(samples, labels, generator, name)
+            for name, (samples, labels, generator) in self.data.items()
+        }
+
+        df = pd.DataFrame(
+            [metrics],
+            columns=["validation", "one_n1_test", "one_n2_test", "one_n3_test"],
+        )
+
+        df.to_csv(f"{self.p_preds}one_clas_metrics.csv", index=False)
+
+        return df
+

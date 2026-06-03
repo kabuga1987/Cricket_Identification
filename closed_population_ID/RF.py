@@ -103,6 +103,38 @@ class RFClassifier:
         mfccs = [sample_to_mfccs_dict[sample] for sample in samples]
         df = pd.DataFrame({"samples": samples,"labels": labels})
         return df, labels, np.asarray(mfccs)
+        
+    # def random_forest_model(self, sample_to_mfccs_dict, samples, labels):
+    #     """Train a random forest classifier using grid search."""
+    
+    #     _, y_train, x_train = self.samples_to_mfccs(
+    #         samples,
+    #         labels,
+    #         sample_to_mfccs_dict
+    #     )
+    
+    #     parameter_grid = {
+    #         "n_estimators": [100, 200, 500, 1000],
+    #         "max_features": [6, 7, 8, 10]
+    #     }
+    
+    #     grid_search = GridSearchCV(
+    #         estimator=RandomForestClassifier(),
+    #         param_grid=parameter_grid,
+    #         cv=3,
+    #         n_jobs=-1
+    #     )
+    
+    #     grid_search.fit(x_train, y_train)
+    
+    #     print(f"Best parameters: {grid_search.best_params_}")
+    
+    #     np.save(
+    #         os.path.join(self.p_predictions, "best_parameters.npy"),
+    #         grid_search.best_params_
+    #     )
+    
+    #     return grid_search.best_estimator_
 
     def random_forest_model(self, sample_to_mfccs_dict, samples, labels):
         """Train a random forest classifier."""

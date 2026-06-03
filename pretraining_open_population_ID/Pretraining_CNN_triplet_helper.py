@@ -346,3 +346,114 @@ class Training:
 
         return model, history
 
+#=====================================================
+
+class Predictions:
+
+    def __init__(self, path_val_test_samples, path_tests, p_arrays, path_preds, shp, bs):
+
+        self.path_val_test_samples = path_val_test_samples
+        self.path_tests = path_tests
+        self.p_arrays = p_arrays
+        self.path_preds = path_preds
+        self.bs = bs
+        self.shp = shp
+
+        self.evaluator = None
+        self.model = None
+
+        self.test_files = {
+            "n1_validation": os.path.join(path_tests, "n1_validation_pairs.csv"),
+            "n1_test": os.path.join(path_tests, "n1_test_pairs.csv"),
+            "n2_test": os.path.join(path_tests, "n2_test_pairs.csv"),
+            "n3_test": os.path.join(path_tests, "n3_test_pairs.csv"),
+            "n1_n2_test": os.path.join(path_tests, "n1_n2_test_pairs.csv"),
+            "n1_n3_test": os.path.join(path_tests, "n1_n3_test_pairs.csv"),
+            "n2_n3_test": os.path.join(path_tests, "n2_n3_test_pairs.csv"),
+        }
+
+        self.val_test_files = [
+            os.path.join(path_val_test_samples, "n1_validation.csv"),
+            os.path.join(path_val_test_samples, "n1_test.csv"),
+            os.path.join(path_val_test_samples, "n2_test.csv"),
+            os.path.join(path_val_test_samples, "n3_test.csv"),
+        ]
+
+    # =========================================================
+    # LOAD VALIDATION + TEST SAMPLES
+    # =========================================================
+    def evaluation_samples(self):
+        return pd.concat([pd.read_csv(f) for f in self.val_test_files]).Segment.values
+
+    # =========================================================
+    # EMBEDDINGS
+    # =========================================================
+    def sample_to_embedding(self, samples):
+        testgen = TestGe(samples, self.shp, self.bs, self.p_arrays)
+        emb = self.model.predict(testgen, verbose=1)
+        return {samples[i]: emb[i] for i in range(len(samples))}
+
+    # =========================================================
+    # VALIDATION THRESHOLD
+    # =========================================================
+    def optimal_threshold(self, emb_dict, name):
+
+        df = pd.read_csv(self.test_files["n1_validation"])
+        s1, s2, y = df.sample_1.values, df.sample_2.values, df.label.values
+
+        e1 = np.array([emb_dict[s] for s in s1])
+        e2 = np.array([emb_dict[s] for s in s2])
+
+        pre, rec, f1, acc, thr, dist, preds = self.evaluator.evaluation_metrics(e1, e2, y, name)
+
+        df["Euclid_dist"], df["Threshold"], df["Predictions"] = dist, thr, preds
+        df.to_csv(os.path.join(self.path_preds, name + ".csv"), index=False)
+
+        return pre, rec, f1, acc, thr
+
+    # =========================================================
+    # TEST EVALUATION
+    # =========================================================
+    def test_predictions(self, path, emb_dict, thr, name):
+
+        df = pd.read_csv(path)
+        s1, s2, y = df.sample_1.values, df.sample_2.values, df.label.values
+
+        e1 = np.array([emb_dict[s] for s in s1])
+        e2 = np.array([emb_dict[s] for s in s2])
+
+        P, R, F, A, dist, preds = self.evaluator.mymetrics(e1, e2, y, thr, name)
+
+        df["Euclid_dist"], df["Threshold"], df["Predictions"] = dist, thr, preds
+        df.to_csv(os.path.join(self.path_preds, name + ".csv"), index=False)
+
+        return P, R, F, A
+
+    # =========================================================
+    # FULL EXECUTION PIPELINE
+    # =========================================================
+    def Execution(self):
+
+        samples = self.evaluation_samples()
+        emb_dict = self.sample_to_embedding(samples)
+
+        pre, rec, f1, acc, thr = self.optimal_threshold(emb_dict, "n1_val")
+
+        results = {"n1v": [pre, rec, f1, acc]}
+
+        for name, path in self.test_files.items():
+            if name.endswith("_test"):
+                results[name.replace("_test", "")] = self.test_predictions(
+                    path, emb_dict, thr, name
+                )
+
+        df = pd.DataFrame.from_dict(
+            results,
+            orient="index",
+            columns=["precision", "recall", "f1_score", "accuracy"]
+        ).rename_axis("nights")
+
+        df.to_csv(os.path.join(self.path_preds, "metrics.csv"))
+        print("Evaluation has finished")
+
+        return df
